@@ -346,7 +346,8 @@ Smart Calendar Agent AI helps users:
 **Mohammad Baseet Naseri**
 
 - AI & Data Science Enthusiast
-- System Administrator
+- AI Engineer
+- Full-Stack Developer
 - AI Project Builder
 
 ---
