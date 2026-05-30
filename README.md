@@ -67,7 +67,7 @@ The goal is to help users maintain a healthy balance between meetings, deep work
 
 ---
 
-# ✨ Features
+#  Features
 
 ## AI Copilot Assistant
 
