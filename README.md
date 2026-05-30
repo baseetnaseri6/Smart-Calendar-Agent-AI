@@ -354,4 +354,4 @@ Smart Calendar Agent AI helps users:
 
 # License
 
-This project is licensed under the MIT License.
+MIT License 
