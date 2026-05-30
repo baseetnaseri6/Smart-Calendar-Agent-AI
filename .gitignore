@@ -1,0 +1,23 @@
+# Secrets
+.env
+credentials.json
+client_secret.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Env
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log

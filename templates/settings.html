@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settings | Smart Calendar Agent AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="bi bi-calendar2-week"></i>
+            </div>
+            <div>
+                <h3>Smart Calendar</h3>
+                <span>Agent AI</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/"><i class="bi bi-house"></i> Dashboard</a>
+            <a href="/calendar"><i class="bi bi-calendar3"></i> Calendar</a>
+            <a href="/meetings"><i class="bi bi-people"></i> Meetings</a>
+            <a href="/focus"><i class="bi bi-clock-history"></i> Focus Time</a>
+            <a href="/ai-insights"><i class="bi bi-stars"></i> AI Insights</a>
+            <a href="/tasks"><i class="bi bi-check2-square"></i> Tasks</a>
+            <a href="/analytics"><i class="bi bi-bar-chart"></i> Analytics</a>
+            <a href="/copilot"><i class="bi bi-robot"></i> Copilot</a>
+            <a href="/settings" class="active"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="user-avatar">B</div>
+            <div>
+                <h6>Mohammad Naseri</h6>
+                <small>AI Workspace</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="dashboard-header">
+            <div>
+                <h1>Workspace Settings</h1>
+                <p>Manage your AI calendar workspace, local assistant and productivity system.</p>
+            </div>
+
+            <div class="header-buttons">
+                <button class="header-btn" id="themeToggle" title="Toggle theme">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+
+                <a href="/copilot" class="date-button text-decoration-none">
+                    <i class="bi bi-robot"></i>
+                    Copilot
+                </a>
+
+                {% if connected %}
+                    <a href="/logout" class="date-button text-decoration-none">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Disconnect
+                    </a>
+                {% else %}
+                    <a href="/login" class="date-button text-decoration-none">
+                        <i class="bi bi-google"></i>
+                        Connect
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <section class="workspace-hero">
+
+            <div class="workspace-left">
+                <div class="workspace-avatar">
+                    B
+                </div>
+
+                <div>
+                    <div class="workspace-badge">
+                        <i class="bi bi-stars"></i>
+                        Smart Calendar Agent AI
+                    </div>
+
+                    <h1>AI Workspace Center</h1>
+
+                    <p>
+                        Control your calendar automation, local Ollama AI, Copilot actions,
+                        focus goals, burnout alerts and productivity settings.
+                    </p>
+
+                    <div class="workspace-hero-buttons">
+                        <a href="/copilot">
+                            <i class="bi bi-robot"></i>
+                            Ask Copilot
+                        </a>
+
+                        <a href="/calendar" class="secondary">
+                            <i class="bi bi-calendar-plus"></i>
+                            Manage Calendar
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workspace-right">
+
+                <div class="workspace-status">
+                    <i class="bi bi-google"></i>
+                    {% if connected %}
+                        Calendar Connected
+                    {% else %}
+                        Calendar Not Connected
+                    {% endif %}
+                </div>
+
+                <div class="workspace-status">
+                    <i class="bi bi-cpu"></i>
+                    Ollama Active
+                </div>
+
+                <div class="workspace-status">
+                    <i class="bi bi-robot"></i>
+                    Copilot Ready
+                </div>
+
+                <div class="workspace-status">
+                    <i class="bi bi-shield-check"></i>
+                    Burnout AI Enabled
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="workspace-stats">
+
+            <div class="workspace-stat-card">
+                <div class="workspace-stat-icon blue-bg">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h2>{{ events|length if events else 0 }}</h2>
+                <span>Events Today</span>
+            </div>
+
+            <div class="workspace-stat-card">
+                <div class="workspace-stat-icon purple-bg">
+                    <i class="bi bi-calendar-week"></i>
+                </div>
+                <h2>{{ week_events|length if week_events else 0 }}</h2>
+                <span>Weekly Events</span>
+            </div>
+
+            <div class="workspace-stat-card">
+                <div class="workspace-stat-icon green-bg">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+                <h2>2h</h2>
+                <span>Daily Focus Goal</span>
+            </div>
+
+            <div class="workspace-stat-card">
+                <div class="workspace-stat-icon orange-bg">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+                <h2>1.0</h2>
+                <span>Workspace Version</span>
+            </div>
+
+        </section>
+
+        <section class="quick-tools">
+
+            <a href="/calendar" class="tool-card">
+                <i class="bi bi-calendar-plus"></i>
+                <span>Create Event</span>
+                <small>Add or manage calendar events</small>
+            </a>
+
+            <a href="/focus" class="tool-card">
+                <i class="bi bi-clock-history"></i>
+                <span>Focus Planner</span>
+                <small>Protect deep work time</small>
+            </a>
+
+            <a href="/copilot" class="tool-card">
+                <i class="bi bi-robot"></i>
+                <span>Ask Copilot</span>
+                <small>Chat with your calendar AI</small>
+            </a>
+
+            <a href="/analytics" class="tool-card">
+                <i class="bi bi-bar-chart"></i>
+                <span>Analytics</span>
+                <small>View weekly productivity data</small>
+            </a>
+
+        </section>
+
+        <div class="content-grid">
+
+            <div class="settings-pro-panel">
+                <div class="settings-pro-header">
+                    <div>
+                        <h3>
+                            <i class="bi bi-person-circle"></i>
+                            Profile
+                        </h3>
+                        <p>Your workspace identity and environment.</p>
+                    </div>
+                </div>
+
+                <div class="settings-pro-list">
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Username</strong>
+                            <p>Displayed in the sidebar and workspace profile.</p>
+                        </div>
+                        <span>Basnasryeet</span>
+                    </div>
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Workspace Type</strong>
+                            <p>Local AI productivity workspace.</p>
+                        </div>
+                        <span>AI Workspace</span>
+                    </div>
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Timezone</strong>
+                            <p>Used for calendar actions and schedule analysis.</p>
+                        </div>
+                        <span>Europe/Berlin</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="settings-pro-panel">
+                <div class="settings-pro-header">
+                    <div>
+                        <h3>
+                            <i class="bi bi-cpu"></i>
+                            AI Preferences
+                        </h3>
+                        <p>Local AI model and assistant behavior.</p>
+                    </div>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Local AI Engine</strong>
+                        <p>Ollama local AI assistant is enabled.</p>
+                    </div>
+                    <div class="modern-switch on"><span></span></div>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>AI Model</strong>
+                        <p>Current local model.</p>
+                    </div>
+                    <strong class="settings-value">llama3.2</strong>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Calendar Actions</strong>
+                        <p>Create, move and delete events from Copilot.</p>
+                    </div>
+                    <div class="modern-switch on"><span></span></div>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Professional Tone</strong>
+                        <p>Copilot answers in a clean productivity style.</p>
+                    </div>
+                    <div class="modern-switch on"><span></span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="content-grid">
+
+            <div class="settings-pro-panel">
+                <div class="settings-pro-header">
+                    <div>
+                        <h3>
+                            <i class="bi bi-calendar3"></i>
+                            Calendar Preferences
+                        </h3>
+                        <p>Work hours, focus goals and smart burnout alerts.</p>
+                    </div>
+                </div>
+
+                <div class="settings-pro-list">
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Work Hours</strong>
+                            <p>Used for free-time planning and productivity scoring.</p>
+                        </div>
+                        <span>09:00 - 17:00</span>
+                    </div>
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Daily Focus Goal</strong>
+                            <p>Recommended minimum deep work time.</p>
+                        </div>
+                        <span>2 hours</span>
+                    </div>
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Burnout Alerts</strong>
+                            <p>Warns when meeting pressure becomes high.</p>
+                        </div>
+                        <span>Enabled</span>
+                    </div>
+
+                    <div class="settings-pro-row">
+                        <div>
+                            <strong>Google Calendar</strong>
+                            <p>OAuth connection status.</p>
+                        </div>
+                        <span>
+                            {% if connected %}
+                                Connected
+                            {% else %}
+                                Offline
+                            {% endif %}
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="settings-pro-panel">
+                <div class="settings-pro-header">
+                    <div>
+                        <h3>
+                            <i class="bi bi-palette"></i>
+                            Appearance
+                        </h3>
+                        <p>Control the workspace look and feel.</p>
+                    </div>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Theme Mode</strong>
+                        <p>Switch between light and dark mode.</p>
+                    </div>
+                    <button class="settings-theme-button" id="settingsThemeBtn">
+                        Toggle Theme
+                    </button>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Modern SaaS UI</strong>
+                        <p>Optimized for portfolio screenshots.</p>
+                    </div>
+                    <div class="modern-switch on"><span></span></div>
+                </div>
+
+                <div class="settings-toggle-row">
+                    <div>
+                        <strong>Premium Workspace Feel</strong>
+                        <p>Gradient cards, AI status and quick actions.</p>
+                    </div>
+                    <div class="modern-switch on"><span></span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <section class="settings-about-pro">
+
+            <div>
+                <h3>
+                    <i class="bi bi-info-circle"></i>
+                    About Smart Calendar Agent AI
+                </h3>
+
+                <p>
+                    Smart Calendar Agent AI is a local AI productivity system built with Flask,
+                    Google Calendar API, Ollama, Bootstrap and Chart.js. It analyzes calendar load,
+                    protects focus time, detects burnout risk and manages calendar actions through
+                    a Copilot-style assistant.
+                </p>
+            </div>
+
+            <div class="settings-tech-grid">
+
+                <div class="tech-pill">
+                    <i class="bi bi-code-slash"></i>
+                    Flask
+                </div>
+
+                <div class="tech-pill">
+                    <i class="bi bi-google"></i>
+                    Google Calendar API
+                </div>
+
+                <div class="tech-pill">
+                    <i class="bi bi-cpu"></i>
+                    Ollama
+                </div>
+
+                <div class="tech-pill">
+                    <i class="bi bi-bootstrap"></i>
+                    Bootstrap
+                </div>
+
+                <div class="tech-pill">
+                    <i class="bi bi-bar-chart"></i>
+                    Chart.js
+                </div>
+
+                <div class="tech-pill">
+                    <i class="bi bi-stars"></i>
+                    AI Copilot
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<script>
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+const settingsThemeBtn = document.getElementById("settingsThemeBtn");
+
+function applyTheme(theme) {
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        themeIcon.classList.remove("bi-moon-stars");
+        themeIcon.classList.add("bi-sun");
+    } else {
+        document.body.classList.remove("dark-mode");
+        themeIcon.classList.remove("bi-sun");
+        themeIcon.classList.add("bi-moon-stars");
+    }
+
+    localStorage.setItem("theme", theme);
+}
+
+applyTheme(localStorage.getItem("theme") || "light");
+
+themeToggle.addEventListener("click", function () {
+    const isDark = document.body.classList.contains("dark-mode");
+    applyTheme(isDark ? "light" : "dark");
+});
+
+settingsThemeBtn.addEventListener("click", function () {
+    const isDark = document.body.classList.contains("dark-mode");
+    applyTheme(isDark ? "light" : "dark");
+});
+</script>
+
+</body>
+</html>

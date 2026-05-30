@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Copilot | Smart Calendar Agent AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+{% set meetings_count = stats.meetings_count if stats else 0 %}
+{% set meeting_hours = stats.meeting_hours if stats else 0 %}
+{% set focus_hours = stats.focus_hours if stats else 0 %}
+{% set burnout_score = stats.burnout_score if stats else 0 %}
+{% set burnout_level = stats.burnout_level if stats else "Not Connected" %}
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="bi bi-calendar2-week"></i>
+            </div>
+            <div>
+                <h3>Smart Calendar</h3>
+                <span>Agent AI</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/"><i class="bi bi-house"></i> Dashboard</a>
+            <a href="/calendar"><i class="bi bi-calendar3"></i> Calendar</a>
+            <a href="/meetings"><i class="bi bi-people"></i> Meetings</a>
+            <a href="/focus"><i class="bi bi-clock-history"></i> Focus Time</a>
+            <a href="/ai-insights"><i class="bi bi-stars"></i> AI Insights</a>
+            <a href="/tasks"><i class="bi bi-check2-square"></i> Tasks</a>
+            <a href="/analytics"><i class="bi bi-bar-chart"></i> Analytics</a>
+            <a href="/copilot" class="active"><i class="bi bi-robot"></i> Copilot</a>
+            <a href="#"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="user-avatar">B</div>
+            <div>
+                <h6>Mohammad Naseri</h6>
+                <small>AI Workspace</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="dashboard-header">
+            <div>
+                <h1>Calendar Copilot</h1>
+                <p>Ask general questions or calendar-based questions. Copilot will understand both.</p>
+            </div>
+
+            <div class="header-buttons">
+                <button class="header-btn" id="themeToggle">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+
+                <a href="/copilot" class="date-button text-decoration-none">
+                    <i class="bi bi-trash"></i>
+                    Reset Chat
+                </a>
+
+                {% if connected %}
+                    <a href="/logout" class="date-button text-decoration-none">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Disconnect
+                    </a>
+                {% else %}
+                    <a href="/login" class="date-button text-decoration-none">
+                        <i class="bi bi-google"></i>
+                        Connect
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="content-grid">
+
+            <div class="schedule-panel copilot-chat-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-stars"></i>
+                        Smart Calendar Copilot
+                    </h3>
+                </div>
+
+                <div class="copilot-chat-box chatgpt-style" id="chatBox">
+
+                    <div class="chat-empty-state" id="emptyState">
+                        <div class="chatgpt-logo mx-auto mb-3">
+                            <i class="bi bi-stars"></i>
+                        </div>
+                        <h3>How can I help you today?</h3>
+                        <p>
+                            Ask me anything. I can answer general questions and also analyze your calendar.
+                        </p>
+                    </div>
+
+                </div>
+
+                <form id="copilotForm" class="copilot-input-form chatgpt-input">
+                    <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Message Smart Calendar Copilot..."
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button type="submit" id="sendBtn">
+                        <i class="bi bi-arrow-up"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="recommendation-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-lightning-charge"></i>
+                        Try asking
+                    </h3>
+                </div>
+
+                <button class="suggestion-btn" data-question="Hello">
+                    <i class="bi bi-chat-dots"></i>
+                    Say hello
+                </button>
+
+                <button class="suggestion-btn" data-question="What should I focus on today?">
+                    <i class="bi bi-bullseye"></i>
+                    What should I focus on today?
+                </button>
+
+                <button class="suggestion-btn" data-question="Explain my burnout risk.">
+                    <i class="bi bi-heart-pulse"></i>
+                    Explain my burnout risk
+                </button>
+
+                <button class="suggestion-btn" data-question="Give me a smart plan for today.">
+                    <i class="bi bi-check2-square"></i>
+                    Build today’s plan
+                </button>
+
+                <div class="google-card">
+                    <div class="icon-stat purple-bg">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+
+                    <div>
+                        <h4>Local AI</h4>
+                        <span class="connected">Ollama Llama 3.2</span>
+                        <p>No paid GPT API required. Your assistant runs locally.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<script>
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function applyTheme(theme) {
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        themeIcon.classList.remove("bi-moon-stars");
+        themeIcon.classList.add("bi-sun");
+    } else {
+        document.body.classList.remove("bi-sun");
+        document.body.classList.remove("dark-mode");
+        themeIcon.classList.remove("bi-sun");
+        themeIcon.classList.add("bi-moon-stars");
+    }
+
+    localStorage.setItem("theme", theme);
+}
+
+applyTheme(localStorage.getItem("theme") || "light");
+
+themeToggle.addEventListener("click", function () {
+    const isDark = document.body.classList.contains("dark-mode");
+    applyTheme(isDark ? "light" : "dark");
+});
+
+const chatBox = document.getElementById("chatBox");
+const copilotForm = document.getElementById("copilotForm");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function scrollToBottom() {
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function removeEmptyState() {
+    const emptyState = document.getElementById("emptyState");
+    if (emptyState) {
+        emptyState.remove();
+    }
+}
+
+function addUserMessage(message) {
+    removeEmptyState();
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-row user-row";
+
+    wrapper.innerHTML = `
+        <div class="chatgpt-user-bubble">
+            ${escapeHtml(message)}
+        </div>
+    `;
+
+    chatBox.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function addAiMessage(message) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-row assistant-row";
+
+    wrapper.innerHTML = `
+        <div class="assistant-avatar">
+            <i class="bi bi-stars"></i>
+        </div>
+        <div class="chatgpt-ai-bubble">
+            ${escapeHtml(message).replace(/\n/g, "<br>")}
+        </div>
+    `;
+
+    chatBox.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function addTypingMessage() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-row assistant-row";
+    wrapper.id = "typingMessage";
+
+    wrapper.innerHTML = `
+        <div class="assistant-avatar">
+            <i class="bi bi-stars"></i>
+        </div>
+        <div class="chatgpt-ai-bubble typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+        </div>
+    `;
+
+    chatBox.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function removeTypingMessage() {
+    const typing = document.getElementById("typingMessage");
+    if (typing) {
+        typing.remove();
+    }
+}
+
+async function sendMessage(message) {
+    addUserMessage(message);
+    addTypingMessage();
+
+    sendBtn.disabled = true;
+
+    try {
+        const response = await fetch("/copilot-chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+
+        removeTypingMessage();
+
+        if (data.success) {
+            addAiMessage(data.answer);
+        } else {
+            addAiMessage(data.answer || "Something went wrong.");
+        }
+
+    } catch (error) {
+        removeTypingMessage();
+        addAiMessage("Network error. Please try again.");
+    }
+
+    sendBtn.disabled = false;
+}
+
+copilotForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const message = messageInput.value.trim();
+
+    if (!message) {
+        return;
+    }
+
+    messageInput.value = "";
+    sendMessage(message);
+});
+
+document.querySelectorAll(".suggestion-btn").forEach(function (button) {
+    button.addEventListener("click", function () {
+        const question = button.getAttribute("data-question");
+        sendMessage(question);
+    });
+});
+</script>
+
+</body>
+</html>

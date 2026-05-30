@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Insights | Smart Calendar Agent AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+{% set meetings_count = stats.meetings_count if stats else 0 %}
+{% set meeting_hours = stats.meeting_hours if stats else 0 %}
+{% set focus_hours = stats.focus_hours if stats else 0 %}
+{% set burnout_score = stats.burnout_score if stats else 0 %}
+{% set burnout_level = stats.burnout_level if stats else "Not Connected" %}
+{% set recommendations = stats.recommendations if stats else [] %}
+
+{% set productivity_score = 70 %}
+{% if focus_hours >= 2 and meeting_hours <= 3 %}
+    {% set productivity_score = 90 %}
+{% elif focus_hours >= 1 and meeting_hours <= 4 %}
+    {% set productivity_score = 75 %}
+{% elif meeting_hours >= 5 %}
+    {% set productivity_score = 45 %}
+{% endif %}
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="bi bi-calendar2-week"></i>
+            </div>
+            <div>
+                <h3>Smart Calendar</h3>
+                <span>Agent AI</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/"><i class="bi bi-house"></i> Dashboard</a>
+            <a href="/calendar"><i class="bi bi-calendar3"></i> Calendar</a>
+            <a href="/meetings"><i class="bi bi-people"></i> Meetings</a>
+            <a href="/focus"><i class="bi bi-clock-history"></i> Focus Time</a>
+            <a href="/ai-insights" class="active"><i class="bi bi-stars"></i> AI Insights</a>
+            <a href="/tasks"><i class="bi bi-check2-square"></i> Tasks</a>
+            <a href="/analytics"><i class="bi bi-bar-chart"></i> Analytics</a>
+            <a href="#"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="user-avatar">B</div>
+            <div>
+                <h6>Mohammad Naseri</h6>
+                <small>AI Workspace</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="dashboard-header">
+            <div>
+                <h1>AI Insights</h1>
+                <p>Local Ollama AI analysis for burnout, focus, and productivity.</p>
+            </div>
+
+            <div class="header-buttons">
+                <button class="header-btn" id="themeToggle">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+
+                <a href="/" class="date-button text-decoration-none">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Sync
+                </a>
+
+                {% if connected %}
+                    <a href="/logout" class="date-button text-decoration-none">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Disconnect
+                    </a>
+                {% else %}
+                    <a href="/login" class="date-button text-decoration-none">
+                        <i class="bi bi-google"></i>
+                        Connect
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if not connected %}
+            <div class="focus-form-panel">
+                <div class="panel-header">
+                    <h3><i class="bi bi-google"></i> Google Calendar Not Connected</h3>
+                </div>
+
+                <p style="color: var(--muted);">
+                    Connect your Google Calendar to generate AI calendar insights.
+                </p>
+
+                <a href="/login" class="recommendation-btn text-decoration-none">
+                    <i class="bi bi-google"></i>
+                    Connect Google Calendar
+                </a>
+            </div>
+        {% endif %}
+
+        {% if connected %}
+
+        <div class="stats-grid">
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>AI Burnout Risk</h5>
+                    <h2 class="{% if burnout_level == 'High' %}danger-color{% elif burnout_level == 'Medium' %}orange-color{% else %}green-color{% endif %}">
+                        {{ burnout_level }}
+                    </h2>
+                    <h4>{{ burnout_score }}/100</h4>
+                    <p>AI-based risk estimate from meetings and focus time.</p>
+                </div>
+
+                <div class="icon-stat {% if burnout_level == 'High' %}danger-bg{% elif burnout_level == 'Medium' %}orange-bg{% else %}green-bg{% endif %}">
+                    <i class="bi bi-activity"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Productivity Score</h5>
+                    <h2 class="{% if productivity_score >= 80 %}green-color{% elif productivity_score >= 60 %}orange-color{% else %}danger-color{% endif %}">
+                        {{ productivity_score }}%
+                    </h2>
+                    <h4>Today</h4>
+                    <p>Balanced score from focus time and meeting pressure.</p>
+                </div>
+
+                <div class="icon-stat purple-bg">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Focus Health</h5>
+                    {% if focus_hours >= 2 %}
+                        <h2 class="green-color">Strong</h2>
+                        <h4>{{ focus_hours }}h focus</h4>
+                        <p>Your focus time is healthy today.</p>
+                    {% elif focus_hours >= 1 %}
+                        <h2 class="orange-color">Medium</h2>
+                        <h4>{{ focus_hours }}h focus</h4>
+                        <p>Add one more focus block if possible.</p>
+                    {% else %}
+                        <h2 class="danger-color">Weak</h2>
+                        <h4>{{ focus_hours }}h focus</h4>
+                        <p>Your calendar needs protected focus time.</p>
+                    {% endif %}
+                </div>
+
+                <div class="icon-stat blue-bg">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Meeting Health</h5>
+                    {% if meeting_hours >= 5 %}
+                        <h2 class="danger-color">Heavy</h2>
+                        <h4>{{ meeting_hours }}h meetings</h4>
+                        <p>Too much meeting time may reduce deep work.</p>
+                    {% elif meeting_hours >= 3 %}
+                        <h2 class="orange-color">Moderate</h2>
+                        <h4>{{ meeting_hours }}h meetings</h4>
+                        <p>Breaks are recommended between meetings.</p>
+                    {% else %}
+                        <h2 class="green-color">Healthy</h2>
+                        <h4>{{ meeting_hours }}h meetings</h4>
+                        <p>Your meeting load is manageable.</p>
+                    {% endif %}
+                </div>
+
+                <div class="icon-stat orange-bg">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="content-grid">
+
+            <div class="schedule-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-stars"></i>
+                        Ollama AI Recommendations
+                    </h3>
+                </div>
+
+                {% if recommendations %}
+                    <div class="timeline">
+                        {% for item in recommendations %}
+                            <div class="timeline-card {% if loop.index == 1 %}focus-card{% endif %}">
+                                <div>
+                                    <i class="bi bi-lightbulb"></i>
+                                    {{ item }}
+                                </div>
+                                <span>AI</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="timeline-card">
+                        <div>
+                            <i class="bi bi-info-circle"></i>
+                            No AI recommendations yet.
+                        </div>
+                        <span>Empty</span>
+                    </div>
+                {% endif %}
+
+                <div class="calendar-btn-wrapper">
+                    <a href="/focus" class="calendar-btn text-decoration-none">
+                        <i class="bi bi-plus-circle"></i>
+                        Create Focus Block
+                    </a>
+                </div>
+            </div>
+
+            <div class="recommendation-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-cpu"></i>
+                        AI Engine Status
+                    </h3>
+                </div>
+
+                <div class="recommendation-card success-card">
+                    <div>
+                        <strong>Local AI Active</strong>
+                        <p>Ollama Llama 3.2 is generating recommendations locally.</p>
+                    </div>
+                    <i class="bi bi-cpu"></i>
+                </div>
+
+                <div class="recommendation-card info-card">
+                    <div>
+                        <strong>No GPT API Required</strong>
+                        <p>This project works without paid OpenAI API keys.</p>
+                    </div>
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+                <div class="recommendation-card warning-card">
+                    <div>
+                        <strong>Privacy Friendly</strong>
+                        <p>Your calendar analysis can run locally on your machine.</p>
+                    </div>
+                    <i class="bi bi-lock"></i>
+                </div>
+
+                <a href="/analytics" class="recommendation-btn mt-3 d-block text-center text-decoration-none">
+                    <i class="bi bi-bar-chart"></i>
+                    View Analytics
+                </a>
+            </div>
+
+        </div>
+
+        <div class="focus-form-panel">
+            <div class="panel-header">
+                <h3>
+                    <i class="bi bi-robot"></i>
+                    AI Weekly Summary
+                </h3>
+            </div>
+
+            <div class="timeline">
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-calendar-week"></i>
+                        This week contains {{ week_events|length }} calendar events.
+                    </div>
+                    <span>Week</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-clock"></i>
+                        Today you have {{ meeting_hours }} hours of scheduled calendar time.
+                    </div>
+                    <span>Today</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-bullseye"></i>
+                        Your focus time today is {{ focus_hours }} hours.
+                    </div>
+                    <span>Focus</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-heart-pulse"></i>
+                        Burnout level is currently {{ burnout_level }}.
+                    </div>
+                    <span>Risk</span>
+                </div>
+
+            </div>
+        </div>
+
+        {% endif %}
+
+    </main>
+</div>
+
+<script>
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function applyTheme(theme) {
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        themeIcon.classList.remove("bi-moon-stars");
+        themeIcon.classList.add("bi-sun");
+    } else {
+        document.body.classList.remove("dark-mode");
+        themeIcon.classList.remove("bi-sun");
+        themeIcon.classList.add("bi-moon-stars");
+    }
+
+    localStorage.setItem("theme", theme);
+}
+
+applyTheme(localStorage.getItem("theme") || "light");
+
+themeToggle.addEventListener("click", function () {
+    const isDark = document.body.classList.contains("dark-mode");
+    applyTheme(isDark ? "light" : "dark");
+});
+</script>
+
+</body>
+</html>

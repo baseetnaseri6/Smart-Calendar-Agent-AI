@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analytics | Smart Calendar Agent AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+{% set meetings_count = stats.meetings_count if stats else 0 %}
+{% set meeting_hours = stats.meeting_hours if stats else 0 %}
+{% set focus_hours = stats.focus_hours if stats else 0 %}
+{% set burnout_score = stats.burnout_score if stats else 0 %}
+{% set burnout_level = stats.burnout_level if stats else "Not Connected" %}
+{% set recommendations = stats.recommendations if stats else [] %}
+
+{% set productivity_score = 70 %}
+{% if focus_hours >= 2 and meeting_hours <= 3 %}
+    {% set productivity_score = 90 %}
+{% elif focus_hours >= 1 and meeting_hours <= 4 %}
+    {% set productivity_score = 75 %}
+{% elif meeting_hours >= 5 %}
+    {% set productivity_score = 45 %}
+{% endif %}
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="bi bi-calendar2-week"></i>
+            </div>
+            <div>
+                <h3>Smart Calendar</h3>
+                <span>Agent AI</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/"><i class="bi bi-house"></i> Dashboard</a>
+            <a href="/calendar"><i class="bi bi-calendar3"></i> Calendar</a>
+            <a href="/meetings"><i class="bi bi-people"></i> Meetings</a>
+            <a href="/focus"><i class="bi bi-clock-history"></i> Focus Time</a>
+            <a href="/ai-insights"><i class="bi bi-stars"></i> AI Insights</a>
+            <a href="/tasks"><i class="bi bi-check2-square"></i> Tasks</a>
+            <a href="/analytics" class="active"><i class="bi bi-bar-chart"></i> Analytics</a>
+            <a href="#"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="user-avatar">B</div>
+            <div>
+                <h6>Mohammad Naseri</h6>
+                <small>AI Workspace</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="dashboard-header">
+            <div>
+                <h1>Analytics</h1>
+                <p>Deep productivity, focus, meeting, and burnout analytics from your calendar.</p>
+            </div>
+
+            <div class="header-buttons">
+                <button class="header-btn" id="themeToggle">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+
+                <a href="/" class="date-button text-decoration-none">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Sync
+                </a>
+
+                {% if connected %}
+                    <a href="/logout" class="date-button text-decoration-none">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Disconnect
+                    </a>
+                {% else %}
+                    <a href="/login" class="date-button text-decoration-none">
+                        <i class="bi bi-google"></i>
+                        Connect
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if not connected %}
+            <div class="focus-form-panel">
+                <div class="panel-header">
+                    <h3><i class="bi bi-google"></i> Google Calendar Not Connected</h3>
+                </div>
+
+                <p style="color: var(--muted);">
+                    Connect your Google Calendar to generate productivity analytics.
+                </p>
+
+                <a href="/login" class="recommendation-btn text-decoration-none">
+                    <i class="bi bi-google"></i>
+                    Connect Google Calendar
+                </a>
+            </div>
+        {% endif %}
+
+        {% if connected %}
+
+        <div class="stats-grid">
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Productivity Score</h5>
+                    <h2 class="{% if productivity_score >= 80 %}green-color{% elif productivity_score >= 60 %}orange-color{% else %}danger-color{% endif %}">
+                        {{ productivity_score }}%
+                    </h2>
+                    <h4>Today</h4>
+                    <p>Calculated from focus time, meeting load, and burnout risk.</p>
+                </div>
+
+                <div class="icon-stat purple-bg">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Focus Hours</h5>
+                    <h2 class="purple-color">{{ focus_hours }}h</h2>
+                    <h4>Today</h4>
+                    <p>Deep work time detected from your calendar.</p>
+                </div>
+
+                <div class="icon-stat blue-bg">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Meeting Hours</h5>
+                    <h2 class="orange-color">{{ meeting_hours }}h</h2>
+                    <h4>Today</h4>
+                    <p>Total time consumed by meetings and calendar events.</p>
+                </div>
+
+                <div class="icon-stat orange-bg">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <div class="card-info">
+                    <h5>Burnout Risk</h5>
+                    <h2 class="{% if burnout_level == 'High' %}danger-color{% elif burnout_level == 'Medium' %}orange-color{% else %}green-color{% endif %}">
+                        {{ burnout_level }}
+                    </h2>
+                    <h4>{{ burnout_score }}/100</h4>
+                    <p>Risk score based on meeting pressure and lack of focus time.</p>
+                </div>
+
+                <div class="icon-stat {% if burnout_level == 'High' %}danger-bg{% elif burnout_level == 'Medium' %}orange-bg{% else %}green-bg{% endif %}">
+                    <i class="bi bi-heart-pulse"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="analytics-grid">
+
+            <div class="chart-card">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-bar-chart"></i>
+                        Weekly Focus Trend
+                    </h3>
+                </div>
+                <canvas id="focusChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-activity"></i>
+                        Burnout Risk Trend
+                    </h3>
+                </div>
+                <canvas id="burnoutChart"></canvas>
+            </div>
+
+        </div>
+
+        <div class="content-grid mt-4">
+
+            <div class="schedule-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-calendar-week"></i>
+                        Weekly Calendar Breakdown
+                    </h3>
+                </div>
+
+                <div class="timeline">
+
+                    {% if week_events %}
+                        {% for event in week_events %}
+                            {% set title = event.get('summary', 'No Title') %}
+                            {% set start = event.get('start', {}).get('dateTime', '') %}
+                            {% set end = event.get('end', {}).get('dateTime', '') %}
+
+                            <div class="timeline-item">
+                                <div class="timeline-time purple-color">
+                                    {% if start %}
+                                        {{ start[5:10] }}
+                                    {% else %}
+                                        All Day
+                                    {% endif %}
+                                </div>
+
+                                <div class="timeline-dot purple-bg"></div>
+
+                                <div class="timeline-card {% if 'focus' in title.lower() or 'study' in title.lower() or 'coding' in title.lower() or 'deep work' in title.lower() %}focus-card{% endif %}">
+                                    <div>
+                                        <i class="bi bi-calendar-event"></i>
+                                        {{ title }}
+                                    </div>
+
+                                    <span>
+                                        {% if start and end %}
+                                            {{ start[11:16] }} - {{ end[11:16] }}
+                                        {% else %}
+                                            All day
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="timeline-card">
+                            <div>
+                                <i class="bi bi-calendar-x"></i>
+                                No events found this week.
+                            </div>
+                            <span>Empty</span>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="recommendation-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-stars"></i>
+                        AI Analytics Insights
+                    </h3>
+                </div>
+
+                <div class="recommendation-card {% if productivity_score >= 80 %}success-card{% elif productivity_score >= 60 %}warning-card{% else %}info-card{% endif %}">
+                    <div>
+                        <strong>Productivity Status</strong>
+                        <p>
+                            {% if productivity_score >= 80 %}
+                                Your productivity balance looks strong today.
+                            {% elif productivity_score >= 60 %}
+                                Your productivity is stable but can improve.
+                            {% else %}
+                                Your productivity may be affected by calendar overload.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+
+                <div class="recommendation-card {% if focus_hours >= 2 %}success-card{% else %}warning-card{% endif %}">
+                    <div>
+                        <strong>Focus Analysis</strong>
+                        <p>
+                            {% if focus_hours >= 2 %}
+                                You have enough protected focus time today.
+                            {% else %}
+                                Add at least one focus block to improve deep work.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <i class="bi bi-bullseye"></i>
+                </div>
+
+                <div class="recommendation-card {% if meeting_hours >= 4 %}warning-card{% else %}success-card{% endif %}">
+                    <div>
+                        <strong>Meeting Analysis</strong>
+                        <p>
+                            {% if meeting_hours >= 4 %}
+                                Meeting time is high; try reducing or rescheduling.
+                            {% else %}
+                                Meeting time looks manageable today.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <i class="bi bi-people"></i>
+                </div>
+
+                <a href="/ai-insights" class="recommendation-btn mt-3 d-block text-center text-decoration-none">
+                    <i class="bi bi-stars"></i>
+                    Open AI Insights
+                </a>
+            </div>
+
+        </div>
+
+        <div class="focus-form-panel mt-4">
+            <div class="panel-header">
+                <h3>
+                    <i class="bi bi-file-earmark-text"></i>
+                    AI Weekly Summary
+                </h3>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-calendar-week"></i>
+                        This week has {{ week_events|length }} calendar events.
+                    </div>
+                    <span>Week</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-people"></i>
+                        Today includes {{ meetings_count }} scheduled events and {{ meeting_hours }} meeting hours.
+                    </div>
+                    <span>Meetings</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-bullseye"></i>
+                        Today’s focus time is {{ focus_hours }} hours.
+                    </div>
+                    <span>Focus</span>
+                </div>
+
+                <div class="timeline-card">
+                    <div>
+                        <i class="bi bi-heart-pulse"></i>
+                        Current burnout risk is {{ burnout_level }} with score {{ burnout_score }}/100.
+                    </div>
+                    <span>Burnout</span>
+                </div>
+            </div>
+
+            <div class="calendar-btn-wrapper">
+                <a href="/focus" class="calendar-btn text-decoration-none">
+                    <i class="bi bi-plus-circle"></i>
+                    Create Focus Block
+                </a>
+
+                <a href="/tasks" class="recommendation-btn text-decoration-none">
+                    <i class="bi bi-check2-square"></i>
+                    View AI Tasks
+                </a>
+            </div>
+        </div>
+
+        {% endif %}
+
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script id="weekly-labels-data" type="application/json">
+{{ (weekly.labels if weekly else ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']) | tojson }}
+</script>
+
+<script id="weekly-focus-data" type="application/json">
+{{ (weekly.focus_hours if weekly else [0,0,0,0,0,0,0]) | tojson }}
+</script>
+
+<script id="weekly-burnout-data" type="application/json">
+{{ (weekly.burnout_scores if weekly else [0,0,0,0,0,0,0]) | tojson }}
+</script>
+
+<script>
+const weeklyLabels = JSON.parse(
+    document.getElementById("weekly-labels-data").textContent
+);
+
+const weeklyFocusHours = JSON.parse(
+    document.getElementById("weekly-focus-data").textContent
+);
+
+const weeklyBurnoutScores = JSON.parse(
+    document.getElementById("weekly-burnout-data").textContent
+);
+
+const chartText = () =>
+    getComputedStyle(document.body).getPropertyValue("--chart-text") || "#111827";
+
+new Chart(document.getElementById("focusChart"), {
+    type: "bar",
+    data: {
+        labels: weeklyLabels,
+        datasets: [{
+            label: "Focus Hours",
+            data: weeklyFocusHours,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { labels: { color: chartText() } }
+        },
+        scales: {
+            x: { ticks: { color: chartText() } },
+            y: { ticks: { color: chartText() } }
+        }
+    }
+});
+
+new Chart(document.getElementById("burnoutChart"), {
+    type: "line",
+    data: {
+        labels: weeklyLabels,
+        datasets: [{
+            label: "Burnout Score",
+            data: weeklyBurnoutScores,
+            borderWidth: 3,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { labels: { color: chartText() } }
+        },
+        scales: {
+            x: { ticks: { color: chartText() } },
+            y: { ticks: { color: chartText() } }
+        }
+    }
+});
+
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function applyTheme(theme) {
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        themeIcon.classList.remove("bi-moon-stars");
+        themeIcon.classList.add("bi-sun");
+    } else {
+        document.body.classList.remove("dark-mode");
+        themeIcon.classList.remove("bi-sun");
+        themeIcon.classList.add("bi-moon-stars");
+    }
+
+    localStorage.setItem("theme", theme);
+}
+
+applyTheme(localStorage.getItem("theme") || "light");
+
+themeToggle.addEventListener("click", function () {
+    const isDark = document.body.classList.contains("dark-mode");
+    applyTheme(isDark ? "light" : "dark");
+});
+</script>
+
+</body>
+</html>
