@@ -1,160 +1,181 @@
-Smart Calendar Agent AI 
+# Smart Calendar Agent AI 
 
-Modern AI-Powered Calendar Management & Productivity Assistant built with Flask, Google Calendar API and Ollama AI.
+AI-Powered Calendar Management, Productivity Analytics & Local AI Copilot built with Flask, Google Calendar and Ollama.
 
-Smart Calendar Agent AI helps users manage meetings, protect focus time, reduce burnout risk, analyze productivity trends and interact with their calendar through an AI Copilot assistant.
+Smart Calendar Agent AI transforms a traditional calendar into an intelligent productivity assistant that helps users manage meetings, protect focus time, reduce burnout risk and improve daily productivity.
 
-⸻
+---
 
-Overview
+##  Overview
 
-Smart Calendar Agent AI is an intelligent productivity platform designed to transform Google Calendar into a smart personal assistant.
+Smart Calendar Agent AI combines:
 
-The platform combines:
+- Google Calendar Integration
+- AI Copilot Assistant
+- Burnout Risk Detection
+- Focus Time Planning
+- Productivity Analytics
+- Smart Recommendations
+- Dark / Light Mode
+- Modern SaaS Dashboard
 
-* Google Calendar Integration
-* AI Productivity Analysis
-* Burnout Detection
-* Focus Time Planning
-* AI Copilot Assistant
-* Calendar Analytics
-* Smart Recommendations
-* Modern SaaS-Style Dashboard
+The goal is to help users maintain a healthy balance between meetings, deep work and productivity.
 
-The goal is to help users maintain a healthy balance between meetings, focus work and productivity.
+---
 
-⸻
+# Screenshots
 
-Key Features 
+## Dashboard
 
-AI Copilot Assistant
+![Dashboard](screenshots/Dashboard.png)
 
-* ChatGPT-style AI interface
-* Powered by local Ollama AI
-* Understands calendar context
-* Answers productivity questions
-* Provides personalized recommendations
-* Can help users manage calendar actions
+---
 
-Google Calendar Integration
+## Calendar
 
-* Secure OAuth Login
-* Real-time Calendar Sync
-* Read Calendar Events
-* Create New Events
-* Create Focus Blocks
-* Edit Events
-* Delete Events
+![Calendar](screenshots/Calendar.png)
 
-Burnout Risk Analysis
+---
 
-* Meeting Load Analysis
-* Focus Time Tracking
-* Burnout Score Calculation
-* Burnout Level Classification
-* AI-Powered Recommendations
+## Meetings
 
-Focus Time Planner
+![Meetings](screenshots/Meeting.png)
 
-* Create Focus Blocks
-* Deep Work Protection
-* Smart Scheduling
-* Productivity Optimization
+---
 
-Analytics Dashboard
+## AI Insights
 
-* Weekly Event Analytics
-* Focus Time Analytics
-* Burnout Trends
-* Productivity Metrics
-* Interactive Charts
+![AI Insights](screenshots/AI-Insights.png)
 
-Smart Recommendations
+---
 
-* AI-generated productivity advice
-* Burnout prevention suggestions
-* Focus improvement recommendations
-* Calendar optimization insights
+## AI Recommendations
 
-Modern SaaS UI
+![Recommendations](screenshots/Recommendations.png)
 
-* Responsive Design
-* Dark Mode
-* Light Mode
-* Premium Dashboard
-* Workspace Center
-* AI Workspace Settings
-* Clean Portfolio-Ready Interface
+---
 
-⸻
+## AI Copilot Chat
 
-Screenshots 
+![Chat](screenshots/Chat.png)
 
-Dashboard
-<img src="screenshots/Dashboard.png" width="900">
-⸻
+---
 
-Calendar
-<img src="screenshots/Calendar.png" width="900">
-⸻
+## Analytics & Charts
 
-Meetings
-<img src="screenshots/Meeting.png" width="900">
-⸻
+![Charts](screenshots/Charts.png)
 
-AI Insights
-<img src="screenshots/AI-Insights.png" width="900">
-⸻
+---
 
-AI Recommendations
-<img src="screenshots/Recommendations.png" width="900">
-⸻
+# ✨ Features
 
-Copilot Chat
-<img src="screenshots/Chat.png" width="900">
-⸻
+## AI Copilot Assistant
 
-Analytics & Charts
-<img src="screenshots/Charts.png" width="900">
-⸻
+- ChatGPT-style interface
+- Powered by Ollama Local AI
+- Calendar-aware conversations
+- Productivity recommendations
+- Scheduling assistance
 
-Technology Stack 
+---
 
-Backend
+## Google Calendar Integration
 
-* Python
-* Flask
-* Google Calendar API
-* OAuth 2.0
+- Secure OAuth Authentication
+- Real-time Calendar Synchronization
+- Create Events
+- Update Events
+- Delete Events
+- Focus Block Creation
 
-AI Layer
+---
 
-* Ollama
-* Local AI Model
-* Local AI Processing
+## Burnout Risk Analysis
 
-Frontend
+- Meeting Load Analysis
+- Focus Time Tracking
+- Burnout Score Calculation
+- Burnout Level Classification
+- AI Recommendations
 
-* HTML5
-* CSS3
-* Bootstrap 5
-* JavaScript
+---
 
-Visualization
+## Focus Time Planner
 
-* Chart.js
+- Deep Work Blocks
+- Productivity Protection
+- Smart Scheduling
+- Focus Goal Tracking
 
-⸻
+---
 
-Project Architecture
+## Analytics Dashboard
 
+- Weekly Analytics
+- Productivity Metrics
+- Burnout Trends
+- Interactive Charts
+- Calendar Insights
+
+---
+
+## Smart Recommendations
+
+- Personalized Productivity Advice
+- Burnout Prevention Suggestions
+- Focus Time Recommendations
+- Calendar Optimization
+
+---
+
+## Modern UI
+
+- Responsive Design
+- Dark Mode
+- Light Mode
+- Premium Dashboard Layout
+- Modern SaaS Experience
+
+---
+
+# Technology Stack
+
+### Backend
+
+- Python
+- Flask
+- Google Calendar API
+- OAuth 2.0
+
+### AI Layer
+
+- Ollama
+- Llama 3.2
+- Local AI Processing
+
+### Frontend
+
+- HTML5
+- CSS3
+- Bootstrap 5
+- JavaScript
+
+### Data Visualization
+
+- Chart.js
+
+---
+
+# Project Structure
+
+```text
 Smart-Calendar-Agent-AI/
 │
 ├── app.py
-├── config.py
 ├── auth.py
 ├── analytics.py
 ├── calendar_utils.py
+├── config.py
 ├── ollama_ai.py
 │
 ├── templates/
@@ -165,224 +186,171 @@ Smart-Calendar-Agent-AI/
 │   ├── ai_insights.html
 │   ├── analytics.html
 │   ├── copilot.html
+│   ├── tasks.html
 │   └── settings.html
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css
-│   │
 │   └── js/
 │
 ├── screenshots/
-│   ├── Dashboard.png
-│   ├── Calendar.png
-│   ├── Meeting.png
-│   ├── AI-Insights.png
-│   ├── Recommendations.png
-│   ├── Chat.png
-│   └── Charts.png
 │
 ├── requirements.txt
+├── .env.example
 ├── README.md
 └── .gitignore
+```
 
-⸻
+---
 
-Configuration 
+# Installation (macOS)
 
-This project does not include personal API keys, OAuth secrets or private credentials.
+### Clone Repository
 
-Each user must create and add their own Google Calendar API credentials before running the application.
-
-Google Calendar API Setup
-
-1. Go to Google Cloud Console.
-2. Create a new project.
-3. Enable Google Calendar API.
-4. Create OAuth 2.0 credentials.
-5. Download the credentials file.
-6. Add the credentials file to the project locally.
-
-Example local structure:
-
-Smart-Calendar-Agent-AI/
-│
-├── credentials.json
-├── app.py
-├── config.py
-└── ...
-
-The credentials file should not be pushed to GitHub.
-
-⸻
-
-Environment Variables
-
-Create a .env file in the project root and add your own values.
-
-Example:
-
-SECRET_KEY=your_secret_key
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=your_google_redirect_uri
-
-Never commit .env files to GitHub.
-
-⸻
-
-Ollama Setup 
-
-Install Ollama locally and download any supported local model.
-
-Example:
-
-ollama pull llama3.2
-
-You can use any compatible Ollama model depending on your hardware and requirements.
-
-⸻
-
-Installation Guide macOS 
-
-Clone Repository
-
+```bash
 git clone https://github.com/baseetnaseri6/Smart-Calendar-Agent-AI.git
 cd Smart-Calendar-Agent-AI
+```
 
-Create Virtual Environment
+### Create Virtual Environment
 
+```bash
 python3 -m venv .venv
+```
 
-Activate Virtual Environment
+### Activate Environment
 
+```bash
 source .venv/bin/activate
+```
 
-Install Dependencies
+### Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-Run Application
+### Run Application
 
+```bash
 python app.py
+```
 
-Then open the local application in your browser.
+Open:
 
-⸻
+```text
+http://127.0.0.1:5001
+```
 
-Installation Guide Windows 
+---
 
-Clone Repository
+# Installation (Windows)
 
+### Clone Repository
+
+```bash
 git clone https://github.com/baseetnaseri6/Smart-Calendar-Agent-AI.git
 cd Smart-Calendar-Agent-AI
+```
 
-Create Virtual Environment
+### Create Virtual Environment
 
+```bash
 python -m venv .venv
+```
 
-Activate Environment
+### Activate Environment
 
+```bash
 .venv\Scripts\activate
+```
 
-Install Dependencies
+### Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-Run Application
+### Run Application
 
+```bash
 python app.py
+```
 
-Then open the local application in your browser.
+---
 
-⸻
+# Environment Variables
 
-Security Notes 
+Create a `.env` file using:
 
-This repository should not contain private credentials.
+```env
+FLASK_SECRET_KEY=your_secret_key_here
 
-Do not commit:
+GOOGLE_CLIENT_SECRETS_FILE=client_secret.json
 
-.env
-credentials.json
-client_secret.json
-token.json
-API keys
-OAuth secrets
-Local tokens
-Private configuration files
+GOOGLE_REDIRECT_URI=http://127.0.0.1:5001/oauth2callback
 
-Recommended .gitignore entries:
+OPENAI_API_KEY=your_api_key_here
+```
 
-.env
-credentials.json
-client_secret.json
-token.json
-.venv/
-venv/
-__pycache__/
-*.pyc
-.vscode/
-.DS_Store
-*.log
+You may replace AI providers, models or integrations according to your own requirements.
 
-⸻
+---
 
-AI Capabilities 
+# AI Capabilities
 
-The platform uses local AI through Ollama to:
+The platform can:
 
-* Analyze meeting schedules
-* Detect burnout risk
-* Generate productivity insights
-* Provide calendar recommendations
-* Answer user questions through Copilot
-* Help users plan focus time and improve productivity
+- Analyze meeting schedules
+- Detect burnout risk
+- Generate productivity insights
+- Recommend focus sessions
+- Optimize calendar planning
+- Interact through AI Copilot
 
-All AI processing can run locally using user-provided Ollama setup.
+All AI processing can run locally using Ollama.
 
-⸻
+---
 
-Future Roadmap 
+# Future Roadmap
 
-Planned features:
+Planned improvements:
 
-* Smart Meeting Scheduler
-* AI Task Manager
-* Automatic Focus Time Optimization
-* Email Integration
-* PDF Productivity Reports
-* Team Workspace Support
-* Multi-Calendar Support
-* Mobile Application
-* Advanced AI Planning Agent
-* Free Time Finder
-* Smart Focus Planner
+- AI Task Manager
+- Smart Meeting Scheduler
+- Automatic Focus Optimization
+- PDF Productivity Reports
+- Multi-Calendar Support
+- Team Collaboration
+- Mobile Version
+- Advanced AI Planning Agent
 
-⸻
+---
 
-Why This Project?
+# Why This Project?
 
-Modern professionals spend a large portion of their day managing calendars, meetings and tasks.
+Modern professionals spend a significant portion of their day managing calendars, meetings and tasks.
 
-Smart Calendar Agent AI was created to transform a traditional calendar into an intelligent productivity assistant that helps users:
+Smart Calendar Agent AI helps users:
 
-* Protect focus time
-* Reduce meeting overload
-* Prevent burnout
-* Improve productivity
-* Make better scheduling decisions
+- Protect Focus Time
+- Reduce Meeting Overload
+- Prevent Burnout
+- Improve Productivity
+- Make Better Scheduling Decisions
 
-⸻
+---
 
-Author
+# Author
 
-Mohammad Baseet Naseri
+**Mohammad Baseet Naseri**
 
-AI • Data Science • Automation • Software Development
+- AI & Data Science Enthusiast
+- System Administrator
+- AI Project Builder
 
-⸻
+---
 
-License
+# License
 
-This project is licensed under the MIT Licens
+This project is licensed under the MIT License.
