@@ -1,4 +1,4 @@
-# Smart Calendar Agent AI
+# Smart Calendar Agent AI 
 
 AI-Powered Calendar Management, Productivity Analytics & Local AI Copilot built with Flask, Google Calendar and Ollama.
 
